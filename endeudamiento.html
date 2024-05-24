@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Datos</title>
+    <link rel="stylesheet" href="estilo.css">
+    
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="documentaciones.html">DOCUMENTACIÓN</a>
+            <a href="ipc.html">INDICADORES INCREMENTO IPC</a>
+            <a href="lokers.html">IDENTIFICACIÓN LOCKERS</a>
+            <a href="liquidez.html">PLAN LIQUIDEZ</a>
+            <a href="rentabilidad.html">CALCULO DE RENTABILIDAD</a>
+            
+        </nav>
+    </header>
+    <main class="container">
+        <h1>Cálculo de Endeudamiento</h1>
+        <p>Para calcularlo deberás utilizar las siguientes fórmulas:</p>
+        <p>Ratio de endeudamiento a largo plazo = (Pasivo no corriente / Patrimonio Neto)</p>
+        <p>Ratio de endeudamiento a corto plazo = (Pasivo corriente / Patrimonio Neto)</p>
+        <form>
+            <label for="pasivoNoCorriente">Pasivo no corriente:</label>
+            <input type="number" id="pasivoNoCorriente" name="pasivoNoCorriente" required>
+            <br>
+            <br>
+            <label for="pasivoCorriente">Pasivo corriente:</label>
+            <input type="number" id="pasivoCorriente" name="pasivoCorriente" required>
+            <br>
+            <br>
+            <label for="patrimonioNeto">Patrimonio Neto:</label>
+            <input type="number" id="patrimonioNeto" name="patrimonioNeto" required>
+            <br>
+            <br>
+            <br>
+            <button type="button" onclick="calcularEndeudamiento()">Calcular Endeudamiento</button>
+        </form>
+        <div id="resultado"></div>
+    </main>
+    <script>
+        function calcularEndeudamiento() {
+            const pasivoNoCorriente = parseFloat(document.getElementById("pasivoNoCorriente").value);
+            const pasivoCorriente = parseFloat(document.getElementById("pasivoCorriente").value);
+            const patrimonioNeto = parseFloat(document.getElementById("patrimonioNeto").value);
+            const ratioLargoPlazo = pasivoNoCorriente / patrimonioNeto;
+            const ratioCortoPlazo = pasivoCorriente / patrimonioNeto;
+
+            const resultado = `
+                <p>Ratio de endeudamiento a largo plazo:</p>
+                <p>(Pasivo no corriente / Patrimonio Neto) = ($${pasivoNoCorriente.toFixed(2)} / $${patrimonioNeto.toFixed(2)}) = ${ratioLargoPlazo.toFixed(2)}</p>
+                <p>Ratio de endeudamiento a corto plazo:</p>
+                <p>(Pasivo corriente / Patrimonio Neto) = ($${pasivoCorriente.toFixed(2)} / $${patrimonioNeto.toFixed(2)}) = ${ratioCortoPlazo.toFixed(2)}</p>
+            `;
+
+            document.getElementById("resultado").innerHTML = resultado;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestión de Contratos</title>
+  <link rel="stylesheet" href="estilo.css">
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      text-align: left;
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+    }
+    tr:hover {
+      background-color: #f5f5f5;
+    }
+  </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+          <a href="documentaciones.html">DOCUMENTACIÓN</a>
+          
+          <a href="lokers.html">IDENTIFICACIÓN LOCKERS</a>
+          <a href="liquidez.html">PLAN LIQUIDEZ</a>
+          <a href="endeudamiento.html">CALCULO ENDUEDAMIENTO</a>
+            <a href="rentabilidad.html">CALCULO DE RENTABILIDAD</a>
+        </nav>
+      </header>
+  <h1>Gestión de Contratos</h1>
+  <input type="text" id="filtro-ipc" placeholder="Buscar por incremento de IPC">
+  <button onclick="agregarContrato()">Agregar Contrato</button>
+
+  <table id="tabla-contratos">
+    <thead>
+      <tr>
+        <th>ID Contrato</th>
+        <th>Fecha Inicio</th>
+        <th>Fecha Fin</th>
+        <th>Canon Inicial</th>
+        <th>Aplica IPC</th>
+        <th>ID Empresa</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    let contratos = [
+      { id: 1, fechaInicio: '2022-01-01', fechaFin: '2024-12-31', canonInicial: 10000, aplicaIPC: true, idEmpresa: 'EMP001' },
+      { id: 2, fechaInicio: '2021-06-15', fechaFin: '2025-06-14', canonInicial: 15000, aplicaIPC: false, idEmpresa: 'EMP002' },
+      { id: 3, fechaInicio: '2023-03-01', fechaFin: '2026-02-28', canonInicial: 20000, aplicaIPC: true, idEmpresa: 'EMP003' },
+      { id: 4, fechaInicio: '2022-09-15', fechaFin: '2025-09-14', canonInicial: 18000, aplicaIPC: true, idEmpresa: 'EMP001' },
+      { id: 5, fechaInicio: '2021-12-01', fechaFin: '2024-11-30', canonInicial: 12000, aplicaIPC: false, idEmpresa: 'EMP002' }
+    ];
+
+    function cargarContratos() {
+      const tablaBody = document.querySelector("#tabla-contratos tbody");
+      tablaBody.innerHTML = "";
+
+      const filtroIPC = document.getElementById("filtro-ipc").value.toLowerCase();
+
+      contratos.forEach((contrato, index) => {
+        const aplicaIPC = contrato.aplicaIPC ? "Sí" : "No";
+
+        if (aplicaIPC.toLowerCase().includes(filtroIPC)) {
+          const row = document.createElement("tr");
+
+          const idCell = document.createElement("td");
+          idCell.textContent = contrato.id;
+          row.appendChild(idCell);
+
+          const fechaInicioCell = document.createElement("td");
+          fechaInicioCell.textContent = contrato.fechaInicio;
+          row.appendChild(fechaInicioCell);
+
+          const fechaFinCell = document.createElement("td");
+          fechaFinCell.textContent = contrato.fechaFin;
+          row.appendChild(fechaFinCell);
+
+          const canonInicialCell = document.createElement("td");
+          canonInicialCell.textContent = contrato.canonInicial;
+          row.appendChild(canonInicialCell);
+
+          const aplicaIPCCell = document.createElement("td");
+          aplicaIPCCell.textContent = aplicaIPC;
+          row.appendChild(aplicaIPCCell);
+
+          const idEmpresaCell = document.createElement("td");
+          idEmpresaCell.textContent = contrato.idEmpresa;
+          row.appendChild(idEmpresaCell);
+
+          const accionesCell = document.createElement("td");
+          const modificarButton = document.createElement("button");
+          modificarButton.textContent = "Modificar";
+          modificarButton.onclick = () => modificarContrato(index);
+          const eliminarButton = document.createElement("button");
+          eliminarButton.textContent = "Eliminar";
+          eliminarButton.onclick = () => eliminarContrato(index);
+          accionesCell.appendChild(modificarButton);
+          accionesCell.appendChild(eliminarButton);
+          row.appendChild(accionesCell);
+
+          tablaBody.appendChild(row);
+        }
+      });
+    }
+
+    function agregarContrato() {
+      const id = contratos.length + 1;
+      const fechaInicio = prompt("Ingrese la fecha de inicio del contrato (AAAA-MM-DD):");
+      const fechaFin = prompt("Ingrese la fecha de finalización del contrato (AAAA-MM-DD):");
+      const canonInicial = prompt("Ingrese el canon inicial del contrato:");
+      const aplicaIPC = confirm("¿Aplica el IPC al contrato?");
+      const idEmpresa = prompt("Ingrese el ID de la empresa:");
+
+      if (fechaInicio && fechaFin && canonInicial && idEmpresa) {
+        const nuevoContrato = {
+          id,
+          fechaInicio,
+          fechaFin,
+          canonInicial: parseFloat(canonInicial),
+          aplicaIPC,
+          idEmpresa
+        };
+
+        contratos.push(nuevoContrato);
+        cargarContratos();
+      }
+    }
+
+    function modificarContrato(index) {
+      const contratoActual = contratos[index];
+      const fechaInicio = prompt("Ingrese la nueva fecha de inicio del contrato (AAAA-MM-DD):", contratoActual.fechaInicio);
+      const fechaFin = prompt("Ingrese la nueva fecha de finalización del contrato (AAAA-MM-DD):", contratoActual.fechaFin);
+      const canonInicial = prompt("Ingrese el nuevo canon inicial del contrato:", contratoActual.canonInicial);
+      const aplicaIPC = confirm("¿Aplica el IPC al contrato?", contratoActual.aplicaIPC);
+      const idEmpresa = prompt("Ingrese el nuevo ID de la empresa:", contratoActual.idEmpresa);
+
+      if (fechaInicio && fechaFin && canonInicial && idEmpresa) {
+        const contratoModificado = {
+          ...contratoActual,
+          fechaInicio,
+          fechaFin,
+          canonInicial: parseFloat(canonInicial),
+          aplicaIPC,
+          idEmpresa
+        };
+
+        contratos[index] = contratoModificado;
+        cargarContratos();
+      }
+    }
+
+    function eliminarContrato(index) {
+      if (confirm("¿Está seguro de eliminar este contrato?")) {
+        contratos.splice(index, 1);
+        cargarContratos();
+      }
+    }
+
+    document.getElementById("filtro-ipc").addEventListener("input", cargarContratos);
+
+    cargarContratos();
+  </script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cálculo de Liquidez</title>
+  <link rel="stylesheet" href="estilo.css">
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      text-align: left;
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+    }
+    tr:hover {
+      background-color: #f5f5f5;
+    }
+  </style>
+</head>
+<header>
+    <header>
+        <nav class="navbar">
+          <a href="documentaciones.html">DOCUMENTACIÓN</a>
+          <a href="ipc.html">INDICADORES INCREMENTO IPC</a>
+          <a href="lokers.html">IDENTIFICACIÓN LOCKERS</a>
+          <a href="endeudamiento.html">CALCULO ENDUEDAMIENTO</a>
+            <a href="rentabilidad.html">CALCULO DE RENTABILIDAD</a>
+          
+        </nav>
+      </header>
+<body>
+  <h1>Cálculo de Liquidez</h1>
+  <p>Para calcular la liquidez o capacidad de pago, utilice la siguiente fórmula:</p>
+  <p><strong>Liquidez = Activos - Pasivos + Patrimonio</strong></p>
+
+  <table id="datos-tabla">
+    <thead>
+      <tr>
+        <th>Activos</th>
+        <th>Pasivos</th>
+        <th>Patrimonio</th>
+        <th>Liquidez</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Los datos se cargarán dinámicamente desde la fuente de datos -->
+    </tbody>
+  </table>
+
+  <button onclick="agregarDato()">Agregar Dato</button>
+
+  
+  <script>
+    // Datos de ejemplo
+    const datos = [
+      { activos: 10000, pasivos: 5000, patrimonio: 3000 },
+      { activos: 20000, pasivos: 8000, patrimonio: 6000 },
+      { activos: 15000, pasivos: 7000, patrimonio: 4000 },
+      { activos: 25000, pasivos: 10000, patrimonio: 8000 }
+    ];
+
+    function calcularLiquidez(activos, pasivos, patrimonio) {
+      return activos - pasivos + patrimonio;
+    }
+
+    function cargarDatos() {
+      const tablaBody = document.querySelector("#datos-tabla tbody");
+      tablaBody.innerHTML = "";
+
+      datos.forEach((dato, index) => {
+        const row = document.createElement("tr");
+
+        const activosCell = document.createElement("td");
+        activosCell.textContent = dato.activos;
+        row.appendChild(activosCell);
+
+        const pasivosCell = document.createElement("td");
+        pasivosCell.textContent = dato.pasivos;
+        row.appendChild(pasivosCell);
+
+        const patrimonioCell = document.createElement("td");
+        patrimonioCell.textContent = dato.patrimonio;
+        row.appendChild(patrimonioCell);
+
+        const liquidezCell = document.createElement("td");
+        const liquidez = calcularLiquidez(dato.activos, dato.pasivos, dato.patrimonio);
+        liquidezCell.textContent = liquidez;
+        row.appendChild(liquidezCell);
+
+        const accionesCell = document.createElement("td");
+        const editarButton = document.createElement("button");
+        editarButton.textContent = "Editar";
+        editarButton.onclick = () => editarDato(index);
+        const eliminarButton = document.createElement("button");
+        eliminarButton.textContent = "Eliminar";
+        eliminarButton.onclick = () => eliminarDato(index);
+        accionesCell.appendChild(editarButton);
+        accionesCell.appendChild(eliminarButton);
+        row.appendChild(accionesCell);
+
+        tablaBody.appendChild(row);
+      });
+    }
+
+    function agregarDato() {
+      // Lógica para agregar un nuevo dato a la fuente de datos
+      // y actualizar la tabla
+      const nuevoActivos = prompt("Ingrese el valor de Activos:");
+      const nuevoPasivos = prompt("Ingrese el valor de Pasivos:");
+      const nuevoPatrimonio = prompt("Ingrese el valor de Patrimonio:");
+
+      if (nuevoActivos && nuevoPasivos && nuevoPatrimonio) {
+        const nuevoDato = {
+          activos: parseFloat(nuevoActivos),
+          pasivos: parseFloat(nuevoPasivos),
+          patrimonio: parseFloat(nuevoPatrimonio)
+        };
+        datos.push(nuevoDato);
+        cargarDatos();
+      }
+    }
+
+    function editarDato(index) {
+      // Lógica para editar un dato en la fuente de datos
+      // y actualizar la tabla
+      const nuevoActivos = prompt("Ingrese el nuevo valor de Activos:", datos[index].activos);
+      const nuevoPasivos = prompt("Ingrese el nuevo valor de Pasivos:", datos[index].pasivos);
+      const nuevoPatrimonio = prompt("Ingrese el nuevo valor de Patrimonio:", datos[index].patrimonio);
+
+      if (nuevoActivos && nuevoPasivos && nuevoPatrimonio) {
+        datos[index].activos = parseFloat(nuevoActivos);
+        datos[index].pasivos = parseFloat(nuevoPasivos);
+        datos[index].patrimonio = parseFloat(nuevoPatrimonio);
+        cargarDatos();
+      }
+    }
+
+    function eliminarDato(index) {
+      // Lógica para eliminar un dato de la fuente de datos
+      // y actualizar la tabla
+      if (confirm("¿Está seguro de eliminar este dato?")) {
+        datos.splice(index, 1);
+        cargarDatos();
+      }
+    }
+
+    // Cargar datos iniciales al cargar la página
+    window.onload = cargarDatos;
+  </script>
+</body>
+</html>

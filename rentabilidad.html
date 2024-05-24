@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Datos</title>
+    <link rel="stylesheet" href="estilo.css">
+    
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="documentaciones.html">DOCUMENTACIÓN</a>
+            <a href="ipc.html">INDICADORES INCREMENTO IPC</a>
+            <a href="lokers.html">IDENTIFICACIÓN LOCKERS</a>
+            <a href="liquidez.html">PLAN LIQUIDEZ</a>
+            <a href="endeudamiento.html">CALCULO ENDUEDAMIENTO</a>
+            
+        </nav>
+    </header>
+    <main>
+        <h1>Cálculo de Rentabilidad</h1>
+        <p>A grandes rasgos, podemos obtener la rentabilidad de una empresa restando los ingresos totales a la inversión (Rentabilidad = Ingresos totales - Inversión).</p>
+        <p>También podemos calcularlo en forma de porcentajes con la siguiente fórmula:</p>
+        <p>Costos/Ingresos totales * 100</p>
+        <form>
+            <label for="ingresos">Ingresos totales:</label>
+            <input type="number" id="ingresos" name="ingresos" required>
+            <br>
+            <br>
+            <label for="inversion">Inversión:</label>
+            <input type="number" id="inversion" name="inversion" required>
+            <br>
+            <br>
+            <label for="costos">Costos:</label>
+            <input type="number" id="costos" name="costos" required>
+            <br>
+            <br>
+            <br>
+            <button type="button" onclick="calcularRentabilidad()">Calcular Rentabilidad</button>
+        </form>
+        <div id="resultado"></div>
+    </main>
+    <script>
+        function calcularRentabilidad() {
+            const ingresos = parseFloat(document.getElementById("ingresos").value);
+            const inversion = parseFloat(document.getElementById("inversion").value);
+            const costos = parseFloat(document.getElementById("costos").value);const rentabilidad = ingresos - inversion;
+        const rentabilidadPorcentaje = (costos / ingresos) * 100;
+
+        const resultado = `
+            <p>Rentabilidad utilizando la fórmula de ingresos totales menos inversión:</p>
+            <p>Rentabilidad = $${ingresos.toFixed(2)} - $${inversion.toFixed(2)} = $${rentabilidad.toFixed(2)}</p>
+            <p>Rentabilidad en forma de porcentaje:</p>
+            <p>Costos/Ingresos totales * 100 = ($${costos.toFixed(2)}/$${ingresos.toFixed(2)}) * 100 = ${rentabilidadPorcentaje.toFixed(2)}%</p>
+            <p>Esto significa que la empresa tuvo una rentabilidad de $${rentabilidad.toFixed(2)} y un margen de ganancias del ${(100 - rentabilidadPorcentaje).toFixed(2)}%.</p>
+        `;
+
+        document.getElementById("resultado").innerHTML = resultado;
+    }
+</script>
+</body>
+</html>

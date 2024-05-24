@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Lockers</title>
+    <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+          <a href="documentaciones.html">DOCUMENTACIÓN</a>
+          <a href="ipc.html">INDICADORES INCREMENTO IPC</a>
+          <a href="liquidez.html">PLAN LIQUIDEZ</a>
+          <a href="endeudamiento.html">CALCULO ENDUEDAMIENTO</a>
+            <a href="rentabilidad.html">CALCULO DE RENTABILIDAD</a>
+        </nav>
+      </header>
+    <h1>Gestión de Lockers</h1>
+
+    <div class="contenedor-busqueda">
+        <label for="busqueda">Buscar:</label>
+        <input type="text" id="busqueda" placeholder="Ingrese número de locker, cédula o nombre">
+        <button id="btn-buscar">Buscar</button>
+    </div>
+
+    <div class="contenedor-tabla">
+        <table>
+            <thead>
+                <tr>
+                    <th>Número de Locker</th>
+                    <th>Nombre Asignado</th>
+                    <th>Cédula</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-body">
+            </tbody>
+        </table>
+    </div>
+
+    <div class="contenedor-formularios">
+        <div id="formulario-agregar" class="formulario">
+            <h2>Agregar Locker</h2>
+            <label for="nombre-asignado">Nombre Asignado:</label>
+            <input type="text" id="nombre-asignado">
+            <label for="cedula">Cédula:</label>
+            <input type="number" id="cedula">
+            <button id="btn-agregar">Agregar</button>
+        </div>
+
+        <div id="formulario-modificar" class="formulario">
+            <h2>Modificar Locker</h2>
+            <label for="id-locker">ID Locker:</label>
+            <input type="number" id="id-locker">
+            <label for="nombre-asignado-modificar">Nombre Asignado:</label>
+            <input type="text" id="nombre-asignado-modificar">
+            <label for="cedula-modificar">Cédula:</label>
+            <input type="number" id="cedula-modificar">
+            <button id="btn-modificar">Modificar</button>
+        </div>
+
+        <div id="formulario-eliminar" class="formulario">
+            <h2>Eliminar Locker</h2>
+            <label for="id-locker-eliminar">ID Locker:</label>
+            <input type="number" id="id-locker-eliminar">
+            <button id="btn-eliminar">Eliminar</button>
+        </div>
+    </div>
+
+    <script>
+        let lockers = [];
+
+        const btnAgregar = document.getElementById('btn-agregar');
+        const btnModificar = document.getElementById('btn-modificar');
+        const btnEliminar = document.getElementById('btn-eliminar');
+
+        const tablaBody = document.getElementById('tabla-body');
+
+        btnAgregar.addEventListener('click', agregarLocker);
+        btnModificar.addEventListener('click', modificarLocker);
+        btnEliminar.addEventListener('click', eliminarLocker);
+
+        function agregarLocker() {
+            const nombreAsignado = document.getElementById('nombre-asignado').value;
+            const cedula = document.getElementById('cedula').value;
+
+            if (nombreAsignado && cedula) {
+                const nuevoLocker = {
+                    id: lockers.length + 1,
+                    numeroLocker: lockers.length + 1,
+                    nombreAsignado: nombreAsignado,
+                    cedula: cedula
+                };
+
+                lockers.push(nuevoLocker);
+                renderizarTabla();
+                document.getElementById('nombre-asignado').value = '';
+                document.getElementById('cedula').value = '';
+            } else {
+                alert('Por favor, complete todos los campos.');
+            }
+        }
+
+        function modificarLocker() {
+            const idLocker = document.getElementById('id-locker').value;
+            const nombreAsignadoModificado = document.getElementById('nombre-asignado-modificar').value;
+            const cedulaModificada = document.getElementById('cedula-modificar').value;
+
+            if (idLocker && nombreAsignadoModificado && cedulaModificada) {
+                const lockerIndex = lockers.findIndex(locker => locker.id === parseInt(idLocker));
+
+                if (lockerIndex !== -1) {
+                    lockers[lockerIndex].nombreAsignado = nombreAsignadoModificado;
+                    lockers[lockerIndex].cedula = cedulaModificada;
+                    renderizarTabla();
+                    document.getElementById('id-locker').value = '';
+                    document.getElementById('nombre-asignado-modificar').value = '';
+                    document.getElementById('cedula-modificar').value = '';
+                } else {
+                    alert('No se encontró el locker con el ID especificado.');
+                }
+            } else {
+                alert('Por favor, complete todos los campos.');
+            }
+        }
+
+        function eliminarLocker() {
+            const idLocker = document.getElementById('id-locker-eliminar').value;
+
+            if (idLocker) {
+                const lockerIndex = lockers.findIndex(locker => locker.id === parseInt(idLocker));
+
+                if (lockerIndex !== -1) {
+                    lockers.splice(lockerIndex, 1);
+                    reacomodarNumeros();
+                    renderizarTabla();
+                    document.getElementById('id-locker-eliminar').value = '';
+                } else {
+                    alert('No se encontró el locker con el ID especificado.');
+                }
+            } else {
+                alert('Por favor, ingrese el ID del locker a eliminar.');
+            }
+        }
+
+        function reacomodarNumeros() {
+            lockers.forEach((locker, index) => {
+                locker.id = index + 1;
+                locker.numeroLocker = index + 1;
+            });
+        }
+
+        function renderizarTabla() {
+            tablaBody.innerHTML = '';
+
+            lockers.forEach(locker => {
+                const fila = document.createElement('tr');
+
+                const celdaNumero = document.createElement('td');
+                celdaNumero.textContent = locker.numeroLocker;
+
+                const celdaNombre = document.createElement('td');
+                celdaNombre.textContent = locker.nombreAsignado;
+
+                const celdaCedula = document.createElement('td');
+                celdaCedula.textContent = locker.cedula;
+
+                const celdaAcciones = document.createElement('td');
+                const btnAccion = document.createElement('button');
+                btnAccion.textContent = 'Ver';
+
+                celdaAcciones.appendChild(btnAccion);
+
+                fila.appendChild(celdaNumero);
+                fila.appendChild(celdaNombre);
+                fila.appendChild(celdaCedula);
+                fila.appendChild(celdaAcciones);
+
+                tablaBody.appendChild(fila);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestión de Documentos de Exportación</title>
+  <link rel="stylesheet" href="estilo.css">
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      text-align: left;
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+    }
+    tr:hover {
+      background-color: #f5f5f5;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <a href="ipc.html">INDICADORES INCREMENTO IPC</a>
+      <a href="lokers.html">IDENTIFICACIÓN LOCKERS</a>
+      <a href="liquidez.html">PLAN LIQUIDEZ</a>
+      <a href="endeudamiento.html">CALCULO ENDUEDAMIENTO</a>
+            <a href="rentabilidad.html">CALCULO DE RENTABILIDAD</a>
+    </nav>
+  </header>
+  <h1>Gestión de Documentos de Exportación</h1>
+
+  <h2>Agregar Nuevo Documento de Exportación</h2>
+  <label for="pais">País:</label>
+  <input type="text" id="pais" name="pais"><br>
+
+  <label for="proveedor">Proveedor:</label>
+  <input type="text" id="proveedor" name="proveedor"><br>
+
+  <label for="documento">Documento:</label>
+  <input type="text" id="documento" name="documento"><br>
+
+  <button onclick="agregarDocumentoExportacion()">Agregar</button>
+
+  <h2>Documentos de Exportación</h2>
+  <table id="tabla-documentos">
+    <thead>
+      <tr>
+        <th>País</th>
+        <th>Proveedor</th>
+        <th>Documento</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    let documentosExportacion = [];
+
+    function agregarDocumentoExportacion() {
+      const pais = document.getElementById("pais").value;
+      const proveedor = document.getElementById("proveedor").value;
+      const documento = document.getElementById("documento").value;
+
+      if (pais && proveedor && documento) {
+        const nuevoDocumento = {
+          pais,
+          proveedor,
+          documento
+        };
+
+        documentosExportacion.push(nuevoDocumento);
+        cargarDocumentosExportacion();
+        document.getElementById("pais").value = "";
+        document.getElementById("proveedor").value = "";
+        document.getElementById("documento").value = "";
+      } else {
+        alert("Por favor, complete todos los campos.");
+      }
+    }
+
+    function eliminarDocumentoExportacion(index) {
+      if (confirm("¿Está seguro de eliminar este documento de exportación?")) {
+        documentosExportacion.splice(index, 1);
+        cargarDocumentosExportacion();
+      }
+    }
+
+    function modificarDocumentoExportacion(index) {
+      const pais = prompt("Ingrese el nuevo país:", documentosExportacion[index].pais);
+      const proveedor = prompt("Ingrese el nuevo proveedor:", documentosExportacion[index].proveedor);
+      const documento = prompt("Ingrese el nuevo documento:", documentosExportacion[index].documento);
+
+      if (pais && proveedor && documento) {
+        const nuevoDocumento = {
+          pais,
+          proveedor,
+          documento
+        };
+
+        documentosExportacion[index] = nuevoDocumento;
+        cargarDocumentosExportacion();
+      } else {
+        alert("Por favor, complete todos los campos.");
+      }
+    }
+
+    function cargarDocumentosExportacion() {
+      const tablaBody = document.querySelector("#tabla-documentos tbody");
+      tablaBody.innerHTML = "";
+
+      documentosExportacion.forEach((documento, index) => {
+        const row = document.createElement("tr");
+
+        const paisCell = document.createElement("td");
+        paisCell.textContent = documento.pais;
+        row.appendChild(paisCell);
+
+        const proveedorCell = document.createElement("td");
+        proveedorCell.textContent = documento.proveedor;
+        row.appendChild(proveedorCell);
+
+        const documentoCell = document.createElement("td");
+        documentoCell.textContent = documento.documento;
+        row.appendChild(documentoCell);
+
+        const accionesCell = document.createElement("td");
+        const eliminarButton = document.createElement("button");
+        eliminarButton.textContent = "Eliminar";
+        eliminarButton.onclick = () => eliminarDocumentoExportacion(index);
+        const modificarButton = document.createElement("button");
+        modificarButton.textContent = "Modificar";
+        modificarButton.onclick = () => modificarDocumentoExportacion(index);
+        accionesCell.appendChild(eliminarButton);
+        accionesCell.appendChild(modificarButton);
+        row.appendChild(accionesCell);
+
+        tablaBody.appendChild(row);
+      });
+    }
+
+    // Cargar datos iniciales
+    cargarDocumentosExportacion();
+  </script>
+</body>
+</html>
